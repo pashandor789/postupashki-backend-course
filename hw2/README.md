@@ -42,6 +42,6 @@ API аунтефикации:
 # Материалы
 
 [Как можно работать с сессиями](https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/06.2.html) - можете отсюда посмотреть, как генерировать SessionID.    
-[RabbitMQ](https://www.rabbitmq.com/tutorials)
-[Фильтры для ImageProcessor'a на Golang](github.com/disintegration/imaging)
-[Клиент докера для CodeProcessor'a на Golang](https://github.com/moby/moby)  
+[RabbitMQ](https://www.rabbitmq.com/tutorials)  
+[Фильтры для ImageProcessor'a на Golang](github.com/disintegration/imaging)  
+[Клиент докера для CodeProcessor'a на Golang](https://github.com/moby/moby)   
