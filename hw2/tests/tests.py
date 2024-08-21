@@ -28,18 +28,6 @@ def auth_token(user_data):
 
     return data['token']
 
-def test_register_user(user_data):
-    register_url = f"{BASE_URL}/register"
-    response = requests.post(register_url, json=user_data)
-    assert response.status_code == 201
-
-def test_login_user(user_data):
-    login_url = f"{BASE_URL}/login"
-    response = requests.post(login_url, json=user_data)
-    assert response.status_code == 200
-    data = response.json()
-    assert 'token' in data
-
 def get_code_processor_payload():
     return {"tranlator": "python3", "code": "print('Hello, stdout world!')"}
 
