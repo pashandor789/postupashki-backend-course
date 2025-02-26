@@ -1,0 +1,189 @@
+basePath: /
+definitions:
+  types.GetResultObjectHandlerResponse:
+    properties:
+      result:
+        type: integer
+    type: object
+  types.GetStatusObjectHandlerResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  types.PostObjectHandlerRequest:
+    properties:
+      key:
+        type: string
+      result:
+        type: integer
+      status:
+        type: string
+    type: object
+  types.PostObjectHandlerResponse:
+    properties:
+      key:
+        type: string
+    type: object
+  types.PutObjectHandlerRequest:
+    properties:
+      key:
+        type: string
+      result:
+        type: integer
+      status:
+        type: string
+    type: object
+host: "8080"
+info:
+  contact: {}
+  description: This is my server
+  title: My API
+  version: "1.0"
+paths:
+  /result/{task_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a result by UUID
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GetResultObjectHandlerResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Object not found
+          schema:
+            type: string
+      summary: Get a result
+      tags:
+      - object
+  /status/{task_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a status by UUID
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.GetStatusObjectHandlerResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Object not found
+          schema:
+            type: string
+      summary: Get a status
+      tags:
+      - object
+  /task:
+    post:
+      consumes:
+      - application/json
+      description: Create a new object with the provided key, result, and status
+      parameters:
+      - description: Object data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.PostObjectHandlerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.PostObjectHandlerResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Create a new object
+      tags:
+      - object
+    put:
+      consumes:
+      - application/json
+      description: Create or update an object with the provided key, result, and status
+      parameters:
+      - description: Object data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.PutObjectHandlerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Create or update an object
+      tags:
+      - object
+  /task/{task_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an object by UUID
+      parameters:
+      - description: Task ID
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Object not found
+          schema:
+            type: string
+      summary: Delete an object
+      tags:
+      - object
+swagger: "2.0"
