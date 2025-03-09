@@ -41,7 +41,7 @@ def test_login_user(user_data):
     assert 'token' in data
 
 def get_code_processor_payload():
-    return {"tranlator": "python3", "code": "print('Hello, stdout world!')"}
+    return {"translator": "python3", "code": "print('Hello, stdout world!')"}
 
 def get_image_processor_payload():
     with open("static/sigma.png", "rb") as image_file:
