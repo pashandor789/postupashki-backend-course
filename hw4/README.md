@@ -12,5 +12,6 @@
 
 ## Литература 
 
-[Про миграции](https://habr.com/ru/articles/540500/)
+[Про миграции](https://ru.stackoverflow.com/questions/1433822/Что-такое-миграции-и-как-их-создать)
+[Про миграции(более продвинуто)](https://habr.com/ru/articles/540500/)  
 [Инструмент для миграции](https://github.com/rubenv/sql-migrate)
