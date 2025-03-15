@@ -12,4 +12,5 @@
 
 ## Литература 
 
-[Миграции](https://github.com/rubenv/sql-migrate)
+[Про миграции](https://habr.com/ru/articles/540500/)
+[Инструмент для миграции](https://github.com/rubenv/sql-migrate)
