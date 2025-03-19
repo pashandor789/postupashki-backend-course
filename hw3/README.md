@@ -28,6 +28,6 @@
 # Материалы
 
 [RabbitMQ](https://www.rabbitmq.com/tutorials)  
-[Фильтры для ImageProcessor'a на Golang](github.com/disintegration/imaging)  
+[Фильтры для ImageProcessor'a на Golang](https://github.com/disintegration/imaging)  
 [Клиент докера для CodeProcessor'a на Golang](https://github.com/moby/moby)  
   
