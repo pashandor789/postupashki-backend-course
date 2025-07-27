@@ -27,11 +27,13 @@
 #### `-t, --timeout SECONDS`
 Устанавливает таймаут для всех HTTP запросов в секундах.
 - По умолчанию: 15 секунд
-- Пример: `hedgedcurl -t 30 url1.com url2.com` / `hedgedcurl --timeout 5 url1.com url2.com`
+- Пример: `hedgedcurl -t 30 url1.com url2.com`
+- Пример: `hedgedcurl --timeout 5 url1.com url2.com`
 
 #### `-h, --help`
 Выводит справку по использованию утилиты.
-- Пример: `hedgedcurl -h` / `hedgedcurl --help`
+- Пример: `hedgedcurl -h`
+- Пример: `hedgedcurl --help`
 
 ### Пример использования:
 
