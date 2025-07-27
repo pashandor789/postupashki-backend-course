@@ -18,11 +18,34 @@
 - Корректно обрабатывает ошибки сети и неверные URL
 - Если все запросы завершились ошибкой, выводит сообщение об ошибке
 
+### Спец. коды возврата:
+
+- **228** - ошибка таймаута
+
+### Обязательные флажки командной строки:
+
+#### `-t, --timeout SECONDS`
+Устанавливает таймаут для всех HTTP запросов в секундах.
+- По умолчанию: 15 секунд
+- Пример: `hedgedcurl -t 30 url1.com url2.com`
+- Пример: `hedgedcurl --timeout 5 url1.com url2.com`
+
+#### `-h, --help`
+Выводит справку по использованию утилиты.
+- Пример: `hedgedcurl -h`
+- Пример: `hedgedcurl --help`
+
 ### Пример использования:
 
 ```bash
 # Запрос к нескольким серверам, вернет первый полученный ответ
 ./hedgedcurl https://www.gosuslugi.ru https://www.prnhub.com https://memepedia.ru https://www.dota2.com
+
+# С таймаутом 5 секунд
+./hedgedcurl -t 5 https://httpbin.org/delay/1 https://httpbin.org/delay/10
+
+# Помощь
+./hedgedcurl --help
 ```
 
 ### Ожидаемый вывод:

@@ -147,7 +147,7 @@ class TestRunner:
 
     def start_test_servers(self):
         try:
-            for i in range(3):
+            for _ in range(3):
                 server = TestHTTPServer()
                 server.start()
                 self.test_servers.append(server)
@@ -168,7 +168,7 @@ class TestRunner:
                 self.warning(f"Ошибка остановки сервера: {e}")
         self.test_servers.clear()
 
-    def run_hedgedcurl(self, urls, timeout=15):
+    def run_hedgedcurl(self, urls, timeout=30):
         try:
             cmd = ['./execute.sh'] + urls
             start_time = time.time()
@@ -191,7 +191,7 @@ class TestRunner:
             }
 
         except subprocess.TimeoutExpired:
-            self.error(f"Таймаут выполнения hedgedcurl ({timeout}s)")
+            self.error(f"Таймаут выполнения hedgedcurl ({timeout}s) - слишком долгое исполнение команды")
             return None
         except FileNotFoundError:
             self.error("Не удалось запустить execute.sh")
@@ -359,6 +359,59 @@ class TestRunner:
         self.success("Тест формата вывода прошел успешно")
         return True
 
+    def test_help_flag(self):
+        self.info("Тестирование флажка --help...")
+
+        result = self.run_hedgedcurl(["-h"], timeout=5)
+        if not result:
+            return False
+
+        if result['returncode'] != 0:
+            self.error("hedgedcurl -h завершился с ошибкой")
+            return False
+
+        if not result['stdout'].strip():
+            self.error("Флажок -h не вывел справку")
+            return False
+
+        self.success("Флажок -h работает корректно")
+
+        result = self.run_hedgedcurl(["--help"], timeout=5)
+        if not result:
+            return False
+
+        if result['returncode'] != 0:
+            self.error("hedgedcurl --help завершился с ошибкой")
+            return False
+
+        if not result['stdout'].strip():
+            self.error("Флажок --help не вывел справку")
+            return False
+
+        self.success("Флажок --help работает корректно")
+        self.success("Тест справки прошел успешно")
+        return True
+
+    def test_timeout_flag(self):
+        if not self.test_servers:
+            return False
+
+        server = self.test_servers[0]
+        url = f"http://localhost:{server.port}/test?delay=10"
+
+        self.info("Тестирование флажка --timeout...")
+
+        result = self.run_hedgedcurl(["-t", "1", url], timeout=5)
+        if not result:
+            return False
+
+        if result['returncode'] != 228:
+            self.error(f"Ожидалась ошибка таймаута с кодом возврата 228, но запрос завершился с кодом {result['returncode']}")
+            return False
+
+        self.success("Тест таймаута прошел успешно")
+        return True
+
     def run_tests(self):
         self.log("🧪 Начало тестирования домашнего задания №1 - hedgedcurl", Fore.CYAN)
 
@@ -378,6 +431,8 @@ class TestRunner:
             tests = [
                 ("Тест с одним URL", self.test_single_url),
                 ("Тест формата вывода", self.test_output_format),
+                ("Тест флажка --help", self.test_help_flag),
+                ("Тест флажка --timeout", self.test_timeout_flag),
                 ("Тест хеджирования с задержками", self.test_hedging_with_delays),
                 ("Тест обработки ошибок", self.test_error_handling),
                 ("Тест смешанных URL", self.test_mixed_valid_invalid)
