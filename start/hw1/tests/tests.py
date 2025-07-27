@@ -360,36 +360,38 @@ class TestRunner:
         return True
 
     def test_help_flag(self):
-        self.info("Тестирование флажка --help...")
+        self.info("Проверка работы флажков -h и --help...")
 
-        result = self.run_hedgedcurl(["-h"], timeout=5)
-        if not result:
+        result_h = self.run_hedgedcurl(["-h"], timeout=5)
+        if not result_h:
+            self.error("Не удалось запустить hedgedcurl с флажком -h")
             return False
 
-        if result['returncode'] != 0:
+        if result_h['returncode'] != 0:
             self.error("hedgedcurl -h завершился с ошибкой")
             return False
 
-        if not result['stdout'].strip():
+        if not result_h['stdout'].strip():
             self.error("Флажок -h не вывел справку")
             return False
 
         self.success("Флажок -h работает корректно")
 
-        result = self.run_hedgedcurl(["--help"], timeout=5)
-        if not result:
+        result_help = self.run_hedgedcurl(["--help"], timeout=5)
+        if not result_help:
+            self.error("Не удалось запустить hedgedcurl с флажком --help")
             return False
 
-        if result['returncode'] != 0:
+        if result_help['returncode'] != 0:
             self.error("hedgedcurl --help завершился с ошибкой")
             return False
 
-        if not result['stdout'].strip():
+        if not result_help['stdout'].strip():
             self.error("Флажок --help не вывел справку")
             return False
 
         self.success("Флажок --help работает корректно")
-        self.success("Тест справки прошел успешно")
+        self.success("Проверка флажков -h и --help прошла успешно")
         return True
 
     def test_timeout_flag(self):
