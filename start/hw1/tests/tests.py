@@ -9,6 +9,7 @@ import json
 import re
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
 from urllib.parse import urlparse, parse_qs
 
 try:
@@ -58,9 +59,13 @@ class DelayHTTPHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
 
+class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
 class TestHTTPServer:
     def __init__(self, port=0):
-        self.server = HTTPServer(('localhost', port), DelayHTTPHandler)
+        self.server = ThreadingHTTPServer(('localhost', port), DelayHTTPHandler)
         self.server.server_port = self.server.server_address[1]
         self.port = self.server.server_port
         self.thread = None
