@@ -275,14 +275,22 @@ class TestRunner:
         ]
 
         self.info("Тестирование обработки ошибок...")
-        result = self.run_hedgedcurl(invalid_urls, timeout=20)
+        args = ["-t", "20"]
+        result = self.run_hedgedcurl(args + invalid_urls, timeout=25)
 
+        execution_time = result["execution_time"]
+        MAX_ALLOWED_TIME = 5.0
+        
         if not result:
             return False
 
         if result['returncode'] == 0:
             self.warning("hedgedcurl завершился успешно при неверных URL")
             self.warning("Ожидалось завершение с ошибкой")
+            return False
+        elif execution_time > MAX_ALLOWED_TIME:
+            self.warning("Слишком долгое выполнение")
+            return False
         else:
             self.success("hedgedcurl корректно обработал ошибки")
 
