@@ -572,7 +572,7 @@ class CryptoServerTestRunner:
 
             headers = {"Authorization": f"Bearer {self.auth_token}"}
 
-            crypto_data = {"symbol": "ETH"}
+            crypto_data = {"symbol": "BTC"}
             response = requests.post(
                 f"{self.server_url}/crypto",
                 json=crypto_data,
@@ -581,7 +581,7 @@ class CryptoServerTestRunner:
             )
 
             response = requests.delete(
-                f"{self.server_url}/crypto/ETH",
+                f"{self.server_url}/crypto/BTC",
                 headers=headers,
                 timeout=5
             )
@@ -603,7 +603,7 @@ class CryptoServerTestRunner:
             self.success("Криптовалюта удалена успешно")
 
             response = requests.get(
-                f"{self.server_url}/crypto/ETH",
+                f"{self.server_url}/crypto/BTC",
                 headers=headers,
                 timeout=5
             )
