@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	serverAddress   = "localhost:8080" 
-	expectedMessage = "OK\n"           
-	bufferSize      = 1024             
+	serverAddress   = "localhost:8080"
+	expectedMessage = "OK\n"
+	bufferSize      = 1024
 )
 
 func main() {
@@ -21,16 +21,13 @@ func main() {
 	}
 	defer conn.Close()
 
-	buf := make([]byte, bufferSize)
-	n, err := conn.Read(buf)
+	data, err := io.ReadAll(conn)
 	if err != nil && err != io.EOF {
 		fmt.Fprintf(os.Stderr, "Ошибка чтения данных: %v\n", err)
 		return
 	}
 
-	data := string(buf[:n])
-
-	if data != expectedMessage {
+	if string(data) != expectedMessage {
 		fmt.Fprintf(os.Stderr, "Получен неожиданный ответ: %s\n", data)
 		return
 	}
