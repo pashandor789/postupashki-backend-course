@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 )
@@ -13,27 +12,39 @@ const (
 )
 
 func main() {
-	connection, err := net.Dial(network, address)
+	listener, err := net.Listen(network, address)
 	if err != nil {
 		log.Printf("Ошибка в подключении: %v\n", err)
 		return
 	}
 
-	defer connection.Close()
+	defer listener.Close()
 
 	for {
-		bufferRead := make([]byte, 256)
-
-		n, err := connection.Read(bufferRead)
+		connection, err := listener.Accept()
 		if err != nil {
-			log.Printf("Ошибка чтения: %v\n", err)
-			return
+			log.Printf("Ошибка соединения с клиентом: %v", err)
 		}
 
-		if string(bufferRead[:n]) != ok {
-			fmt.Println("Ошибка: получен неизвестный ответ: ", string(bufferRead[:n]))
+		_, err = connection.Write([]byte(ok))
+		if err != nil {
+			log.Printf("Ошибка записи: %v", err)
+			connection.Close()
+			break
 		}
-		fmt.Println(string(bufferRead[:n]))
+
+		// bufferRead := make([]byte, 256)
+
+		// n, err := connection.Read(bufferRead)
+		// if err != nil {
+		// 	log.Printf("Ошибка чтения: %v\n", err)
+		// 	return
+		// }
+
+		// if string(bufferRead[0:n]) != ok {
+		// 	fmt.Println("Ошибка: получен неизвестный ответ: ", string(bufferRead[:n]))
+		// }
+		// fmt.Println(string(bufferRead[:n]))
 
 		// _, err = connection.Write([]byte(ok))
 		// if err != nil {
