@@ -1,3 +1,5 @@
+
+
 .PHONY: test install clean help
 
 # Путь к Python
