@@ -15,6 +15,9 @@ elif [ -f "server.js" ]; then
 elif [ -f "server.class" ]; then
     echo "Запуск Java сервера..."
     java server
+elif [ -f "src/bin/server.rs" ]; then
+    echo "Запуск Rust сервера..."
+    cargo run --bin=server
 else
     echo "Не найден файл сервера для запуска"
     exit 1
