@@ -15,6 +15,9 @@ elif [ -f "client.js" ]; then
 elif [ -f "client.class" ]; then
     echo "Запуск Java клиента..."
     java client
+elif [ -f "src/bin/client.rs" ]; then
+    echo "Запуск Rust клиента..."
+    cargo run --bin=client
 else
     echo "Не найден файл клиента для запуска"
     exit 1

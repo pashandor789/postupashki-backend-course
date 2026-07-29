@@ -18,6 +18,9 @@ elif [ -f "client.js" ]; then
 elif [ -f "client.java" ]; then
     echo "Компиляция Java клиента..."
     javac client.java
+elif [ -f "src/bin/client.rs" ]; then
+    echo "Rust клиент с менеджером проектов Cargo не требует предварительной компиляции"
+    exit 0
 else
     echo "Не найден файл клиента для компиляции"
     exit 1
