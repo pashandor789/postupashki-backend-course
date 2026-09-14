@@ -1,0 +1,47 @@
+# Binaries
+hw2
+cryptoserver
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+dist/
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.html
+
+# Dependency directories
+vendor/
+node_modules/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Build artifacts
+tmp/
+temp/
