@@ -3,6 +3,7 @@
 package futex
 
 import (
+	"math"
 	"syscall"
 	"unsafe"
 )
@@ -25,5 +26,5 @@ func Wake(addr *uint32) {
 
 func WakeAll(addr *uint32) {
 	syscall.Syscall6(syscall.SYS_FUTEX, uintptr(unsafe.Pointer(addr)),
-		opWake|private, ^uintptr(0)>>1, 0, 0, 0)
+		opWake|private, uintptr(math.MaxInt32), 0, 0, 0)
 }
