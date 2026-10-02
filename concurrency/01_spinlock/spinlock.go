@@ -7,15 +7,19 @@ type Spinlock struct {
 }
 
 func (s *Spinlock) Lock() {
-	panic("не реализовано")
+	for !s.locked.CompareAndSwap(false, true) {
+	}
 }
 
 func (s *Spinlock) TryLock() bool {
-	panic("не реализовано")
+	return s.locked.CompareAndSwap(false, true)
 }
 
 func (s *Spinlock) Unlock() {
-	panic("не реализовано")
+	if !s.locked.Load() {
+		panic("Spinlock не захвачен")
+	}
+	s.locked.Swap(false)
 }
 
 type TTAS struct {
@@ -23,13 +27,27 @@ type TTAS struct {
 }
 
 func (s *TTAS) Lock() {
-	panic("не реализовано")
+	locked := true
+	for locked {
+		locked = s.locked.Load()
+
+		if !locked {
+			locked = !s.locked.CompareAndSwap(false, true)
+		}
+	}
 }
 
 func (s *TTAS) TryLock() bool {
-	panic("не реализовано")
+	locked := s.locked.Load()
+	if !locked {
+		return s.locked.CompareAndSwap(false, true)
+	}
+	return false
 }
 
 func (s *TTAS) Unlock() {
-	panic("не реализовано")
+	if !s.locked.Load() {
+		panic("Spinlock не захвачен")
+	}
+	s.locked.Swap(false)
 }
