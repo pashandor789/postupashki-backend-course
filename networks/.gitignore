@@ -1,2 +1,15 @@
 __pycache__/
 *.pyc
+# .NET
+bin/
+obj/
+
+# Build output
+build/
+
+# Rider / IntelliJ
+.idea/
+
+# User-specific files
+*.user
+*.suo
