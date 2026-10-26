@@ -22,7 +22,7 @@ def _build():
                                  % (r.returncode, r.stdout, r.stderr))
 
 
-def run(args=(), stdin="", timeout=30):
+def run(args=(), stdin="", timeout=30): # были проблемы на винде
     """Запускает run.sh и возвращает (код возврата, stdout, stderr)."""
     script = TASK_DIR / "run.sh"
     if not script.exists():
@@ -31,10 +31,13 @@ def run(args=(), stdin="", timeout=30):
             % TASK_DIR.name)
     _build()
     env = dict(os.environ, PYTHONUNBUFFERED="1")
+    data = stdin.encode("latin-1") if isinstance(stdin, str) else stdin
     r = subprocess.run(["sh", str(script), *map(str, args)], cwd=TASK_DIR,
-                       input=stdin, capture_output=True, text=True,
+                       input=data, capture_output=True,
                        timeout=timeout, env=env)
-    return r.returncode, r.stdout, r.stderr
+    return (r.returncode,
+            r.stdout.decode("utf-8", "replace"),
+            r.stderr.decode("utf-8", "replace"))
 
 
 def fields(stdout):
