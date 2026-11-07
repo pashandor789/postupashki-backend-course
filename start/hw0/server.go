@@ -3,21 +3,20 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 )
 
-func main() {
+func run() error {
 	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 	defer listener.Close()
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Println(err)
-			return
+			return err
 		}
 
 		_, err = fmt.Fprint(conn, "OK\n")
@@ -26,5 +25,12 @@ func main() {
 		}
 		conn.Close()
 	}
+}
 
+func main() {
+	err := run()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
