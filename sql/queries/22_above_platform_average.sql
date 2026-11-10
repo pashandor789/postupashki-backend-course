@@ -9,7 +9,7 @@
 WITH platform_stats AS (
     SELECT
         platform_id,
-        ROUND(AVG(followers)::numeric, 2) AS platform_avg
+        AVG(followers) AS platform_avg
     FROM streamers
     GROUP BY platform_id
 )
@@ -17,7 +17,7 @@ SELECT
     s.nickname AS streamer,
     p.name AS platform,
     s.followers,
-    ps.platform_avg,
+    ROUND(ps.platform_avg::numeric, 2) AS platform_avg,
     t.tag AS team
 FROM streamers s
 INNER JOIN platforms p ON s.platform_id = p.platform_id

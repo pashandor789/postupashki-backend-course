@@ -12,7 +12,7 @@ WITH ranked_players AS (
         nickname AS player,
         country,
         mmr,
-        DENSE_RANK() OVER (
+        RANK() OVER (
             PARTITION BY country 
             ORDER BY mmr DESC
         ) AS country_rank,

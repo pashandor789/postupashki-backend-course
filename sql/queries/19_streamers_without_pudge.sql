@@ -11,15 +11,16 @@ SELECT
     pl.name AS platform,
     t.tag AS team,
     s.followers,
-    (
-        SELECT COUNT(*)
-        FROM match_players mp
-        WHERE mp.player_id = s.player_id
-    ) AS games
+    COALESCE(g.games, 0) AS games
 FROM streamers s
 INNER JOIN platforms pl ON s.platform_id = pl.platform_id
 LEFT JOIN team_members tm ON s.player_id = tm.player_id AND tm.left_at IS NULL
 LEFT JOIN teams t ON tm.team_id = t.team_id
+LEFT JOIN (
+    SELECT player_id, COUNT(*) AS games
+    FROM match_players
+    GROUP BY player_id
+) g ON g.player_id = s.player_id
 WHERE s.player_id IS NOT NULL AND NOT EXISTS (
     SELECT 1
     FROM match_players mp

@@ -13,32 +13,34 @@ WITH tournament_stats AS (
         t.started_at,
         t.prize_pool,
         COALESCE(
-            (
-                SELECT SUM(prev.prize_pool)
-                FROM tournaments prev
-                WHERE prev.started_at < t.started_at
+            SUM(t.prize_pool) OVER (
+                ORDER BY t.started_at
+                GROUPS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
             ),
             0
         ) AS prev_total,
-        (
-            SELECT COUNT(*)
-            FROM tournaments prev
-            WHERE prev.started_at < t.started_at
-        ) AS prev_count,
-        (
-            SELECT COUNT(*)
-            FROM matches m
-            WHERE m.tournament_id = t.tournament_id
-        ) AS matches_played
+        COALESCE(
+            COUNT(*) OVER (
+                ORDER BY t.started_at
+                GROUPS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+            ),
+            0
+        ) AS prev_count
     FROM tournaments t
+),
+match_counts AS (
+    SELECT tournament_id, COUNT(*) AS matches_played
+    FROM matches
+    GROUP BY tournament_id
 )
 SELECT
-    tournament,
-    started_at,
-    prize_pool,
-    prev_total,
-    prev_count,
-    matches_played
-FROM tournament_stats
-WHERE prize_pool > prev_total
-ORDER BY started_at ASC;
+    ts.tournament,
+    ts.started_at,
+    ts.prize_pool,
+    ts.prev_total,
+    ts.prev_count,
+    COALESCE(mc.matches_played, 0) AS matches_played
+FROM tournament_stats ts
+LEFT JOIN match_counts mc ON mc.tournament_id = ts.tournament_id
+WHERE ts.prize_pool > ts.prev_total
+ORDER BY ts.started_at ASC;
