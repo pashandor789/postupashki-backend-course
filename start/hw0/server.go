@@ -23,14 +23,17 @@ func main() {
 		}
 
 		fmt.Println("Client connected:", conn.RemoteAddr().String())
-
-		data, err := conn.Write([]byte("OK\n"))
-		conn.Close()
-		if err != nil {
-			fmt.Println("Error writing to connection:", err)
-			continue
-		}
-		fmt.Println("Data written:", data)
-
+		go handleConnection(conn)
 	}
+}
+
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
+	data, err := conn.Write([]byte("OK\n"))
+	if err != nil {
+		fmt.Println("Error writing to connection:", err)
+		return
+	}
+	fmt.Println("Data written:", data)
 }
