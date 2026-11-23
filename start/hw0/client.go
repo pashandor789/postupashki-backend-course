@@ -5,27 +5,50 @@ import (
 	"io"
 	"log"
 	"net"
+	"time"
 )
 
-func main() {
-	c, err := net.Dial("tcp", "localhost:8080")
+func ReadResponse(c net.Conn, limit int) error {
+	r := io.LimitReader(c, int64(limit))
+	b, err := io.ReadAll(r)
+	if err != nil {
+		return fmt.Errorf("Ошибка чтения: %v", err)
+	}
+	response := string(b)
+
+	if response != "OK\n" {
+		return fmt.Errorf("Вернулось значение %q, ожидалось %q\n", response, "OK\n")
+	}
+	fmt.Print(response)
+	return err
+}
+
+func RunClient(host string) error {
+	c, err := net.Dial("tcp", host)
 
 	if err != nil {
-		log.Fatalf("Ошибка соединения: %v", err)
+		return fmt.Errorf("Ошибка соединения: %v", err)
 	}
 
 	defer c.Close()
 
-	b, err := io.ReadAll(c)
+	err = c.SetReadDeadline(time.Now().Add(time.Second * 10))
+
 	if err != nil {
-		log.Printf("Ошибка чтения: %v", err)
-		return
+		return fmt.Errorf("Ошибка чтения: %v", err)
 	}
 
-	response := string(b)
+	err = ReadResponse(c, 64)
 
-	if response != "OK\n" {
-		log.Fatalf("Вернулся не ОК((\n")
+	return err
+}
+
+func main() {
+
+	err := RunClient("localhost:8080")
+
+	if err != nil {
+		log.Fatalf("Выполнение закончилось с ошибкой %v", err)
 	}
-	fmt.Print(response)
+
 }
